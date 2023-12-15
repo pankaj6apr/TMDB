@@ -40,6 +40,7 @@ data class MovieDetailsDto(
 
 fun MovieDetailsDto.toMovieDetails() : MovieDetails {
     return MovieDetails(
+        id = id.toString(),
         name = name,
         overview = overview,
         posterPath = poster_path,
@@ -49,7 +50,7 @@ fun MovieDetailsDto.toMovieDetails() : MovieDetails {
         }.joinToString(),
         seasons = seasons.map {
             MovieListItem(
-                id = it.id,
+                id = it.id.toString(),
                 name = it.name,
                 label1 = "${it.episode_count} episodes",
                 picturePath = it.poster_path

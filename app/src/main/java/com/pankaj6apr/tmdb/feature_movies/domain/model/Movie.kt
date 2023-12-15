@@ -28,7 +28,7 @@ fun Movie.toMovieListItem() : MovieListItem {
     df.roundingMode = RoundingMode.CEILING
 
     return MovieListItem(
-        id = id,
+        id = id.toString(),
         name = title,
         label1 = formattedDate,
         label2 = df.format(voteAverage).toString() + " ✰",

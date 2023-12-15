@@ -88,10 +88,13 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+
+    // Kotlin Extensions and Coroutines support for Room
+    implementation ("androidx.room:room-ktx:2.6.1")
 
     // Compose dependencies
-   // implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01"
     implementation("androidx.navigation:navigation-compose:2.5.3")
- //   implementation "androidx.compose.material:material-icons-extended:$compose_version"
-  //  implementation "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
 }

@@ -1,6 +1,11 @@
 package com.pankaj6apr.tmdb.di
 
+import android.app.Application
+import androidx.room.Room
 import com.pankaj6apr.tmdb.common.Constants
+import com.pankaj6apr.tmdb.feature_like.data.model.LikesDatabase
+import com.pankaj6apr.tmdb.feature_like.data.repository.LikesRepositoryImpl
+import com.pankaj6apr.tmdb.feature_like.domain.repository.LikesRepository
 import com.pankaj6apr.tmdb.feature_movie_details.data.remote.MovieDetailsAPI
 import com.pankaj6apr.tmdb.feature_movie_details.data.repository.MovieDetailsRepositoryImpl
 import com.pankaj6apr.tmdb.feature_movie_details.domain.MovieDetailsRepository
@@ -48,5 +53,21 @@ object AppModule {
     @Singleton
     fun provideMovieDetailsRepository(api: MovieDetailsAPI): MovieDetailsRepository {
         return MovieDetailsRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteDatabase(app: Application): LikesDatabase {
+        return Room.databaseBuilder(
+            app,
+            LikesDatabase::class.java,
+            LikesDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLikesRepository(db: LikesDatabase): LikesRepository {
+        return LikesRepositoryImpl(db.likesDao)
     }
 }
