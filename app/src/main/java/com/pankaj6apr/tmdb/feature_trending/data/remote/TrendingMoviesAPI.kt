@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TrendingMoviesAPI {
-    @GET("3/trending/movie/day")
+    @GET("3/trending/tv/week")
     suspend fun getTrendingMovies(
         @Query("api_key") apiKey: String = Constants.API_KEY
     ): TrendingMoviesDto

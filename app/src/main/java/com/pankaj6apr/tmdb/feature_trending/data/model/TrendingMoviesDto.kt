@@ -8,7 +8,7 @@ data class TrendingMoviesDto(
 
 fun TrendingMoviesDto.toTrendingMovies() : TrendingMovies {
     return TrendingMovies(
-        movies = results.map {
+        tvSeries = results.map {
             it.toMovie()
         }
     )

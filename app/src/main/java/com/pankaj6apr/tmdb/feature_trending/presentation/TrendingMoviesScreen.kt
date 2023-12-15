@@ -31,6 +31,8 @@ import com.pankaj6apr.tmdb.R
 import com.pankaj6apr.tmdb.Screen
 import com.pankaj6apr.tmdb.common.Constants
 import com.pankaj6apr.tmdb.feature_trending.domain.model.Movie
+import com.pankaj6apr.tmdb.feature_trending.domain.model.toMovieListItem
+import com.pankaj6apr.tmdb.feature_trending.presentation.model.MovieListItem
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -38,34 +40,36 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 @Composable
-fun TrendingMoviesScreen (viewModel: TrendingMoviesViewModel = hiltViewModel(), navController: NavController) {
+fun TrendingMoviesScreen(
+    viewModel: TrendingMoviesViewModel = hiltViewModel(),
+    navController: NavController
+) {
     val state = viewModel.trendingMoviesState.value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         content = {
-            items(state.trendingMovies.movies.size) { index ->
-                TrendingMovie(state.trendingMovies.movies[index], navController)
+            items(state.trendingMovies.tvSeries.size) { index ->
+                TrendingMovie(state.trendingMovies.tvSeries[index].toMovieListItem(), navController)
             }
         }
     )
 }
 
 @Composable
-fun TrendingMovie(movie: Movie, navController: NavController) {
-    var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    var formattedDate = LocalDate.parse(movie.releaseDate).format(formatter)
-
-    val df = DecimalFormat("#.##")
-    df.roundingMode = RoundingMode.CEILING
-
+fun TrendingMovie(movie: MovieListItem, navController: NavController, isClickable: Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable {
-                navController.navigate(Screen.MovieDetailsScreen.route)
+                if (isClickable) {
+                    navController.navigate(
+                        Screen.MovieDetailsScreen.route
+                                + "?movieId=${movie.id}"
+                    )
+                }
             },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -79,7 +83,7 @@ fun TrendingMovie(movie: Movie, navController: NavController) {
             AsyncImage(
                 modifier = Modifier.height(210.dp),
                 contentScale = ContentScale.Crop,
-                model = "${Constants.IMAGE_URL}${movie.backdropPath}",
+                model = "${Constants.IMAGE_URL}${movie.picturePath}",
                 placeholder = painterResource(id = R.drawable.baseline_image_white_48),
                 error = painterResource(id = R.drawable.baseline_image_white_48),
                 contentDescription = ""
@@ -91,24 +95,28 @@ fun TrendingMovie(movie: Movie, navController: NavController) {
                     .padding(start = 4.dp, end = 4.dp, top = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = formattedDate,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodyMedium,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = df.format(movie.voteAverage).toString() + " ✰",
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                movie.label1?.let {
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.bodyMedium,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                movie.label2?.let {
+                    Text(
+                        text = it,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             Text(
                 modifier = Modifier
                     .wrapContentWidth()
                     .padding(8.dp),
-                text = movie.title,
+                text = movie.name,
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 style = MaterialTheme.typography.titleMedium,

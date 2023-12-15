@@ -13,8 +13,8 @@ data class MovieDto(
     val overview: String,
     val popularity: Double,
     val poster_path: String,
-    val release_date: String,
-    val title: String,
+    val first_air_date: String,
+    val name: String,
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int
@@ -22,20 +22,12 @@ data class MovieDto(
 
 fun MovieDto.toMovie(): Movie {
     return Movie(
-        adult = adult,
-        backdropPath = backdrop_path,
-        genreIds = genre_ids,
         id = id,
         mediaType = media_type,
-        originalLanguage = original_language,
-        originalTitle = original_title,
         overview = overview,
-        popularity = popularity,
         posterPath = poster_path,
-        releaseDate = release_date,
-        title = title,
-        video = video,
-        voteAverage = vote_average,
-        voteCount = vote_count
+        releaseDate = first_air_date,
+        title = name,
+        voteAverage = vote_average
     )
 }
