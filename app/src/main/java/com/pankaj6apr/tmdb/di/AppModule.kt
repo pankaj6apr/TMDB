@@ -1,12 +1,12 @@
 package com.pankaj6apr.tmdb.di
 
 import com.pankaj6apr.tmdb.common.Constants
-import com.pankaj6apr.tmdb.feature_details.data.remote.MovieDetailsAPI
-import com.pankaj6apr.tmdb.feature_details.data.repository.MovieDetailsRepositoryImpl
-import com.pankaj6apr.tmdb.feature_details.domain.MovieDetailsRepository
-import com.pankaj6apr.tmdb.feature_trending.data.remote.TrendingMoviesAPI
-import com.pankaj6apr.tmdb.feature_trending.data.repository.TrendingMoviesRepositoryImpl
-import com.pankaj6apr.tmdb.feature_trending.domain.repository.TrendingMoviesRepository
+import com.pankaj6apr.tmdb.feature_movie_details.data.remote.MovieDetailsAPI
+import com.pankaj6apr.tmdb.feature_movie_details.data.repository.MovieDetailsRepositoryImpl
+import com.pankaj6apr.tmdb.feature_movie_details.domain.MovieDetailsRepository
+import com.pankaj6apr.tmdb.feature_movies.data.remote.MoviesAPI
+import com.pankaj6apr.tmdb.feature_movies.data.repository.MoviesRepositoryImpl
+import com.pankaj6apr.tmdb.feature_movies.domain.repository.TrendingMoviesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,18 +20,18 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideTrendingMoviesApi(): TrendingMoviesAPI {
+    fun provideTrendingMoviesApi(): MoviesAPI {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(TrendingMoviesAPI::class.java)
+            .create(MoviesAPI::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideTrendingMoviesRepository(api: TrendingMoviesAPI): TrendingMoviesRepository {
-        return TrendingMoviesRepositoryImpl(api)
+    fun provideTrendingMoviesRepository(api: MoviesAPI): TrendingMoviesRepository {
+        return MoviesRepositoryImpl(api)
     }
 
     @Provides
