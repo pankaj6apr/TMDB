@@ -1,4 +1,4 @@
-package com.pankaj6apr.tmdb.feature_movies.presentation.model
+package com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList
 
 data class MovieListItem(
     val id: String = "",

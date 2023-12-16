@@ -39,7 +39,7 @@ import com.pankaj6apr.tmdb.feature_like.presentation.AddRemoveLikeViewModel
 import com.pankaj6apr.tmdb.feature_like.presentation.GetLikedMoviesViewModel
 import com.pankaj6apr.tmdb.feature_movies.domain.model.toMovieListItem
 import com.pankaj6apr.tmdb.feature_movies.presentation.SimilarMoviesViewModel
-import com.pankaj6apr.tmdb.feature_movies.presentation.TrendingMovie
+import com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList.TrendingMovie
 
 @Composable
 fun MovieDetailsScreen(

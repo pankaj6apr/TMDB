@@ -1,4 +1,4 @@
-package com.pankaj6apr.tmdb.feature_movies.presentation
+package com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,8 +45,8 @@ import com.pankaj6apr.tmdb.common.Constants
 import com.pankaj6apr.tmdb.feature_like.presentation.GetLikedMoviesViewModel
 import com.pankaj6apr.tmdb.feature_movies.domain.model.Movie
 import com.pankaj6apr.tmdb.feature_movies.domain.model.toMovieListItem
-import com.pankaj6apr.tmdb.feature_movies.presentation.model.MovieListItem
-import com.pankaj6apr.tmdb.feature_movies.presentation.searched.SearchViewModel
+import com.pankaj6apr.tmdb.feature_movies.presentation.SearchViewModel
+import com.pankaj6apr.tmdb.feature_movies.presentation.TrendingMoviesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +56,7 @@ fun TrendingMoviesScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val state = viewModel.trendingMoviesState.value
+    val state = viewModel.moviesListState.value
     val likedState = getLikedMoviesViewModel.likedState.value
 
     Column {
@@ -65,42 +66,64 @@ fun TrendingMoviesScreen(
             onValueChange = searchViewModel::onSearch,
             placeholder = { Text("Search ...") }
         )
-        Text(
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(8.dp),
-            text = if (searchViewModel.searchQuery.value.isEmpty()) "Trending" else "Search results",
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            maxLines = 2,
-            style = MaterialTheme.typography.headlineMedium,
-            overflow = TextOverflow.Ellipsis
-        )
+        if (state.message.isNotBlank() || searchViewModel.searchedMoviesState.value.message.isNotBlank()) {
+            val message = if (state.message.isNotEmpty()) state.message else searchViewModel.searchedMoviesState.value.message
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = message,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        } else if (state.isLoading || searchViewModel.searchedMoviesState.value.isLoading) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        } else {
+            Text(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .padding(8.dp),
+                text = if (searchViewModel.searchQuery.value.isEmpty()) "Trending" else "Search results",
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                style = MaterialTheme.typography.headlineMedium,
+                overflow = TextOverflow.Ellipsis
+            )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            content = {
-                var movies = listOf<Movie>()
-                if (searchViewModel.searchQuery.value.isEmpty()) {
-                    movies = state.movies.movies
-                } else {
-                    movies = searchViewModel.searchedMoviesState.value.movies.movies
-                }
-                items(movies.size) { index ->
-                    val movie = movies[index].toMovieListItem()
-                    movie.liked = likedState.likedMovies.contains(movie.id)
-                    TrendingMovie(
-                        movie
-                    ) {
-                        navController.navigate(
-                            Screen.MovieDetailsScreen.route
-                                    + "?movieId=${movie.id}"
-                        )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                content = {
+                    var movies = listOf<Movie>()
+                    if (searchViewModel.searchQuery.value.isEmpty()) {
+                        movies = state.movies.movies
+                    } else {
+                        movies = searchViewModel.searchedMoviesState.value.movies.movies
+                    }
+                    items(movies.size) { index ->
+                        val movie = movies[index].toMovieListItem()
+                        movie.liked = likedState.likedMovies.contains(movie.id)
+                        TrendingMovie(
+                            movie
+                        ) {
+                            navController.navigate(
+                                Screen.MovieDetailsScreen.route
+                                        + "?movieId=${movie.id}"
+                            )
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
+
 }
 
 @Composable

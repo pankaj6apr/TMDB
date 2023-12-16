@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pankaj6apr.tmdb.feature_movie_details.presentation.MovieDetailsScreen
-import com.pankaj6apr.tmdb.feature_movies.presentation.TrendingMoviesScreen
+import com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList.TrendingMoviesScreen
 import com.pankaj6apr.tmdb.ui.theme.TmdbTheme
 import dagger.hilt.android.AndroidEntryPoint
 

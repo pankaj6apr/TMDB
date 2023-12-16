@@ -1,7 +1,7 @@
 package com.pankaj6apr.tmdb.feature_movie_details.data.model
 
 import com.pankaj6apr.tmdb.feature_movie_details.domain.model.MovieDetails
-import com.pankaj6apr.tmdb.feature_movies.presentation.model.MovieListItem
+import com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList.MovieListItem
 
 data class MovieDetailsDto(
     val adult: Boolean,

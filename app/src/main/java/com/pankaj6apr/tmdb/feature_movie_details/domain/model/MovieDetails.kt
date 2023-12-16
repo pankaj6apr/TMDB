@@ -1,6 +1,6 @@
 package com.pankaj6apr.tmdb.feature_movie_details.domain.model
 
-import com.pankaj6apr.tmdb.feature_movies.presentation.model.MovieListItem
+import com.pankaj6apr.tmdb.feature_movies.presentation.components.movieList.MovieListItem
 
 data class MovieDetails (
     val id: String,
