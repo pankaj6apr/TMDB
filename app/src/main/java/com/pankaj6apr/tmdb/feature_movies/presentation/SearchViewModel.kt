@@ -31,7 +31,7 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500L)
-            searchMoviesUseCase.invoke(query)
+            searchMoviesUseCase(query)
                 .collect {
                     when (it) {
                         is Resource.Success -> {

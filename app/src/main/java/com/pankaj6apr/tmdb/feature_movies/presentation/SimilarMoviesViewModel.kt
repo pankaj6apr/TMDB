@@ -2,6 +2,7 @@ package com.pankaj6apr.tmdb.feature_movies.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pankaj6apr.tmdb.common.Resource
@@ -14,26 +15,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SimilarMoviesViewModel @Inject constructor(
-    private val getSimilarMovies: GetSimilarMoviesUseCase
+    private val getSimilarMovies: GetSimilarMoviesUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _similarMoviesState = mutableStateOf(MoviesListState())
     val similarMoviesState: State<MoviesListState> = _similarMoviesState
 
-    fun fetchSimilarMovies(id: String) {
-        viewModelScope.launch {
-            getSimilarMovies(id).collect {
-                when(it) {
-                    is Resource.Success -> {
-                        _similarMoviesState.value = MoviesListState(
-                            movies = it.data ?: Movies(),
-                            message = if (it.data?.movies?.isNotEmpty() == true) "" else "No result"
-                        )
-                    }
-                    is Resource.Error -> {
-                        _similarMoviesState.value = MoviesListState(message = it.message ?: "An unexpected error occurred")
-                    }
-                    is Resource.Loading -> {
-                        _similarMoviesState.value = MoviesListState(isLoading = true)
+    init {
+        savedStateHandle.get<String>("movieId").let { id ->
+            viewModelScope.launch {
+                getSimilarMovies(id!!).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            _similarMoviesState.value = MoviesListState(
+                                movies = it.data ?: Movies(),
+                                message = if (it.data?.movies?.isNotEmpty() == true) "" else "No result"
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _similarMoviesState.value = MoviesListState(
+                                message = it.message ?: "An unexpected error occurred"
+                            )
+                        }
+
+                        is Resource.Loading -> {
+                            _similarMoviesState.value = MoviesListState(isLoading = true)
+                        }
                     }
                 }
             }

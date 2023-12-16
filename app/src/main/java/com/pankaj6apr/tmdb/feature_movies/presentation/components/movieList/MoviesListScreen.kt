@@ -66,8 +66,11 @@ fun TrendingMoviesScreen(
             onValueChange = searchViewModel::onSearch,
             placeholder = { Text("Search ...") }
         )
-        if (state.message.isNotBlank() || searchViewModel.searchedMoviesState.value.message.isNotBlank()) {
-            val message = if (state.message.isNotEmpty()) state.message else searchViewModel.searchedMoviesState.value.message
+        val message = if (searchViewModel.searchQuery.value.isEmpty())
+                            state.message
+                        else
+                            searchViewModel.searchedMoviesState.value.message
+        if (message.isNotBlank()) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = message,

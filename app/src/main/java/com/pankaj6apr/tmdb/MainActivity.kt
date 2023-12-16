@@ -56,8 +56,7 @@ fun App() {
         ) {
             val id = it.arguments?.getString("movieId") ?: ""
             MovieDetailsScreen(
-                navController = navController,
-                id = id
+                navController = navController
             )
         }
     }
