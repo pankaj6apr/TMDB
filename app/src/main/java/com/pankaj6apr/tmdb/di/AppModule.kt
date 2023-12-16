@@ -11,7 +11,7 @@ import com.pankaj6apr.tmdb.feature_movie_details.data.repository.MovieDetailsRep
 import com.pankaj6apr.tmdb.feature_movie_details.domain.MovieDetailsRepository
 import com.pankaj6apr.tmdb.feature_movies.data.remote.MoviesAPI
 import com.pankaj6apr.tmdb.feature_movies.data.repository.MoviesRepositoryImpl
-import com.pankaj6apr.tmdb.feature_movies.domain.repository.TrendingMoviesRepository
+import com.pankaj6apr.tmdb.feature_movies.domain.repository.MoviesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +35,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrendingMoviesRepository(api: MoviesAPI): TrendingMoviesRepository {
+    fun provideTrendingMoviesRepository(api: MoviesAPI): MoviesRepository {
         return MoviesRepositoryImpl(api)
     }
 

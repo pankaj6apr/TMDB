@@ -17,4 +17,11 @@ interface MoviesAPI {
         @Path("id") id: String,
         @Query("api_key") apiKey: String = Constants.API_KEY
     ): TrendingMoviesDto
+
+
+    @GET("3/search/tv")
+    suspend fun searchMovie(
+        @Query("query") query: String,
+        @Query("api_key") apiKey: String = Constants.API_KEY
+    ): TrendingMoviesDto
 }

@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetSimilarMoviesUseCase @Inject constructor(
+class SearchMoviesUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
-    operator fun invoke(id: String) : Flow<Movies> = flow {
-        emit(repository.getSimilarMovies(id))
+    operator fun invoke(keyword: String) : Flow<Movies> = flow {
+        emit(repository.searchMovies(keyword))
     }
 }

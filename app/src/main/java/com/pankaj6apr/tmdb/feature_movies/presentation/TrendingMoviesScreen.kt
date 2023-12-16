@@ -18,9 +18,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,24 +42,34 @@ import com.pankaj6apr.tmdb.R
 import com.pankaj6apr.tmdb.Screen
 import com.pankaj6apr.tmdb.common.Constants
 import com.pankaj6apr.tmdb.feature_like.presentation.GetLikedMoviesViewModel
+import com.pankaj6apr.tmdb.feature_movies.domain.model.Movie
 import com.pankaj6apr.tmdb.feature_movies.domain.model.toMovieListItem
 import com.pankaj6apr.tmdb.feature_movies.presentation.model.MovieListItem
+import com.pankaj6apr.tmdb.feature_movies.presentation.searched.SearchViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrendingMoviesScreen(
     viewModel: TrendingMoviesViewModel = hiltViewModel(),
     getLikedMoviesViewModel: GetLikedMoviesViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val state = viewModel.trendingMoviesState.value
     val likedState = getLikedMoviesViewModel.likedState.value
 
     Column {
+        TextField(
+            value = searchViewModel.searchQuery.value,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = searchViewModel::onSearch,
+            placeholder = { Text("Search ...") }
+        )
         Text(
             modifier = Modifier
                 .wrapContentWidth()
                 .padding(8.dp),
-            text = "Trending",
+            text = if (searchViewModel.searchQuery.value.isEmpty()) "Trending" else "Search results",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             maxLines = 2,
@@ -68,8 +80,14 @@ fun TrendingMoviesScreen(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             content = {
-                items(state.movies.movies.size) { index ->
-                    val movie = state.movies.movies[index].toMovieListItem()
+                var movies = listOf<Movie>()
+                if (searchViewModel.searchQuery.value.isEmpty()) {
+                    movies = state.movies.movies
+                } else {
+                    movies = searchViewModel.searchedMoviesState.value.movies.movies
+                }
+                items(movies.size) { index ->
+                    val movie = movies[index].toMovieListItem()
                     movie.liked = likedState.likedMovies.contains(movie.id)
                     TrendingMovie(
                         movie
