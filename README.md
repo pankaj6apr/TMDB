@@ -21,3 +21,7 @@ Using TMDB APIs to create an Android app to show TV series. The app uses MVVM de
 ![](https://github.com/pankaj6apr/TMDB/blob/master/search.gif)
 ## Like
 ![](https://github.com/pankaj6apr/TMDB/blob/master/Like.gif)
+## Error Handling
+![](https://github.com/pankaj6apr/TMDB/blob/master/error.gif)
+## Loading indicator
+![](https://github.com/pankaj6apr/TMDB/blob/master/loading.gif)
