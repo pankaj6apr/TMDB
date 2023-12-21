@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,6 +38,7 @@ import coil.compose.AsyncImage
 import com.pankaj6apr.tmdb.R
 import com.pankaj6apr.tmdb.Screen
 import com.pankaj6apr.tmdb.common.Constants
+import com.pankaj6apr.tmdb.common.TestTags
 import com.pankaj6apr.tmdb.feature_like.presentation.AddRemoveLikeViewModel
 import com.pankaj6apr.tmdb.feature_like.presentation.GetLikedMoviesViewModel
 import com.pankaj6apr.tmdb.feature_movies.domain.model.toMovieListItem
@@ -94,7 +96,8 @@ fun MovieDetailsScreen(
                     Text(
                         modifier = Modifier
                             .wrapContentWidth()
-                            .padding(8.dp),
+                            .padding(8.dp)
+                            .testTag(TestTags.MovieDetailsTitle),
                         text = it.name,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,

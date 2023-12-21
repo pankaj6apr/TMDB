@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +43,7 @@ import coil.compose.AsyncImage
 import com.pankaj6apr.tmdb.R
 import com.pankaj6apr.tmdb.Screen
 import com.pankaj6apr.tmdb.common.Constants
+import com.pankaj6apr.tmdb.common.TestTags
 import com.pankaj6apr.tmdb.feature_like.presentation.GetLikedMoviesViewModel
 import com.pankaj6apr.tmdb.feature_movies.domain.model.Movie
 import com.pankaj6apr.tmdb.feature_movies.domain.model.toMovieListItem
@@ -62,7 +64,7 @@ fun TrendingMoviesScreen(
     Column {
         TextField(
             value = searchViewModel.searchQuery.value,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag(TestTags.SearchBoxInput),
             onValueChange = searchViewModel::onSearch,
             placeholder = { Text("Search ...") }
         )
@@ -110,6 +112,7 @@ fun TrendingMoviesScreen(
                     } else {
                         movies = searchViewModel.searchedMoviesState.value.movies.movies
                     }
+
                     items(movies.size) { index ->
                         val movie = movies[index].toMovieListItem()
                         movie.liked = likedState.likedMovies.contains(movie.id)
@@ -136,6 +139,7 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
             .width(LocalConfiguration.current.screenWidthDp.dp / 2)
             .padding(8.dp)
             .clip(shape = RoundedCornerShape(8.dp))
+            .testTag(TestTags.TrendingListItemCard)
             .clickable {
                 onClick?.let { it() }
             },
@@ -153,7 +157,9 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
             ) {
 
                 AsyncImage(
-                    modifier = Modifier.height(210.dp),
+                    modifier = Modifier
+                        .height(210.dp)
+                        .testTag(TestTags.TrendingListItemImage),
                     contentScale = ContentScale.Crop,
                     model = "${Constants.IMAGE_URL}${movie.picturePath}",
                     placeholder = painterResource(id = R.drawable.baseline_image_white_48),
@@ -169,6 +175,8 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
                 ) {
                     movie.label2?.let {
                         Text(
+                            modifier = Modifier
+                                .testTag(TestTags.TrendingListItemLabel2),
                             text = it,
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
@@ -177,6 +185,8 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
                     }
                     movie.label1?.let {
                         Text(
+                            modifier = Modifier
+                                .testTag(TestTags.TrendingListItemLabel1),
                             text = it,
                             maxLines = 1,
                             style = MaterialTheme.typography.bodyMedium,
@@ -187,7 +197,8 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
                 Text(
                     modifier = Modifier
                         .wrapContentWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .testTag(TestTags.TrendingListItemTitle),
                     text = movie.name,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
@@ -200,6 +211,7 @@ fun TrendingMovie(movie: MovieListItem, onClick: (() -> Unit)? = null) {
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(12.dp)
+                        .testTag(TestTags.TrendingListItemLiked)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
